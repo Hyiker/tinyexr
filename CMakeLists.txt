@@ -39,6 +39,21 @@ add_library(${BUILD_TARGET} ${TINYEXR_SOURCES} ${TINYEXR_DEP_SOURCES})
 add_sanitizers(${BUILD_TARGET})
 
 target_include_directories(${BUILD_TARGET} PRIVATE ${PROJECT_SOURCE_DIR})
+
+set(TINYEXR_INCLUDE_DIR "${CMAKE_BINARY_DIR}/include")
+file(MAKE_DIRECTORY ${TINYEXR_INCLUDE_DIR})
+
+configure_file(
+    ${PROJECT_SOURCE_DIR}/tinyexr.h
+    ${TINYEXR_INCLUDE_DIR}/tinyexr.h
+    COPYONLY
+)
+
+target_include_directories(${BUILD_TARGET}
+    PUBLIC
+        $<BUILD_INTERFACE:${TINYEXR_INCLUDE_DIR}>
+)
+
 target_link_libraries(${BUILD_TARGET} ${TINYEXR_EXT_LIBRARIES} ${CMAKE_DL_LIBS})
 
 # Increase warning level for clang.
