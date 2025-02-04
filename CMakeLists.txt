@@ -35,10 +35,10 @@ if(TINYEXR_USE_MINIZ)
   list(APPEND TINYEXR_EXT_LIBRARIES miniz)
 endif()
 
-add_library(${BUILD_TARGET} ${TINYEXR_SOURCES} ${TINYEXR_DEP_SOURCES})
+add_library(${BUILD_TARGET} INTERFACE ${TINYEXR_SOURCES} ${TINYEXR_DEP_SOURCES})
 add_sanitizers(${BUILD_TARGET})
 
-target_include_directories(${BUILD_TARGET} PRIVATE ${PROJECT_SOURCE_DIR})
+# target_include_directories(${BUILD_TARGET} PRIVATE ${PROJECT_SOURCE_DIR})
 
 set(TINYEXR_INCLUDE_DIR "${CMAKE_BINARY_DIR}/include")
 file(MAKE_DIRECTORY ${TINYEXR_INCLUDE_DIR})
@@ -50,11 +50,11 @@ configure_file(
 )
 
 target_include_directories(${BUILD_TARGET}
-    PUBLIC
+    INTERFACE
         $<BUILD_INTERFACE:${TINYEXR_INCLUDE_DIR}>
 )
 
-target_link_libraries(${BUILD_TARGET} ${TINYEXR_EXT_LIBRARIES} ${CMAKE_DL_LIBS})
+target_link_libraries(${BUILD_TARGET} INTERFACE ${TINYEXR_EXT_LIBRARIES} ${CMAKE_DL_LIBS})
 
 # Increase warning level for clang.
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND NOT MSVC)
